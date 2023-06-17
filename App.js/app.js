@@ -1,14 +1,58 @@
 const chalk = require("chalk")
-const getNotes = require("./notes.js")
-// // const fs = require("fs")
+const yargs = require("yargs")
+const notes = require("./notes.js")
 
-// // fs.writeFileSync("notes.txt" , "My Name is Sumant Khanna")
- 
-// const fs = require("fs")
-// fs.appendFileSync("notes.txt", " Welcome to my Repository")
+yargs.version("1.0.0")
+yargs.command({
+    command: "add",
+    describe: "Add a new note",
+    builder: {
+        title: {
+            describe: "Note title",
+            demandOption: true,
+            type: "string"
+        },
+        body: {
+            describe: "Note's Body",
+            demandOption: true,
+            type: "string"
+        }
+    },
+    handler(argv){
+        notes.addNote(argv.title, argv.body)
+    }
+})
 
-const msg = getNotes()
-console.log(msg)
 
-const greenMsg = chalk.bold.green("Success")
-console.log(greenMsg)
+yargs.command({
+    command: "remove",
+    describe: "Remove a note",
+    builder: {
+        title: {
+            describe: "Note title",
+            demandOption: true,
+            type: "string"
+        }
+    },
+    handler(argv){
+        notes.removeNote(argv.title)
+    }
+})
+
+yargs.command({
+    command: "list",
+    describe: "list a new note",
+    handler(){
+        notes.listNotes()
+}
+})
+
+yargs.command({
+    command: "read",
+    describe: "Read a new note",
+    handler(){
+        console.log("Reading a new note!")
+    }
+})
+
+yargs.parse()
